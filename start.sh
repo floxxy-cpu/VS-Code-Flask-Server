@@ -1,13 +1,10 @@
 #!/bin/bash
 
-# Install code-server
-curl -fsSL https://code-server.dev/install.sh | sh
+# Install code-server without su/root
+curl -fsSL https://code-server.dev/install.sh | sh -s -- --method standalone --prefix /tmp/code-server
 
-# Install Flask
-pip install -r requirements.txt
-
-# Start Flask in the background on port 8080
+# Start Flask in the background
 python3 app.py &
 
-# code-server as main process on Render's public port
-code-server --bind-addr 0.0.0.0:$PORT --auth password --disable-telemetry /root
+# Start code-server as main process
+/tmp/code-server/bin/code-server --bind-addr 0.0.0.0:$PORT --auth password --disable-telemetry /root
